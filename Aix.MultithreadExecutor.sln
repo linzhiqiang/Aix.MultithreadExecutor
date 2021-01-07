@@ -1,0 +1,39 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29020.237
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{881EC1DE-B7D0-4180-AF96-224831901274}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aix.MultithreadExecutor", "src\Aix.MultithreadExecutor\Aix.MultithreadExecutor.csproj", "{7098D755-1803-466E-91EC-0FA4EE77866F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "examples", "examples", "{85D209A7-DA3A-42FC-B918-E8F3A8ACC2C5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aix.MultithreadExecutorSample", "examples\Aix.MultithreadExecutorSample\Aix.MultithreadExecutorSample.csproj", "{0B6478E4-838E-44B8-A87A-42064552F5E3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7098D755-1803-466E-91EC-0FA4EE77866F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7098D755-1803-466E-91EC-0FA4EE77866F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7098D755-1803-466E-91EC-0FA4EE77866F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7098D755-1803-466E-91EC-0FA4EE77866F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B6478E4-838E-44B8-A87A-42064552F5E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B6478E4-838E-44B8-A87A-42064552F5E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B6478E4-838E-44B8-A87A-42064552F5E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B6478E4-838E-44B8-A87A-42064552F5E3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7098D755-1803-466E-91EC-0FA4EE77866F} = {881EC1DE-B7D0-4180-AF96-224831901274}
+		{0B6478E4-838E-44B8-A87A-42064552F5E3} = {85D209A7-DA3A-42FC-B918-E8F3A8ACC2C5}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0EA97CB7-979F-43DE-B2BA-49016C5EC2D8}
+	EndGlobalSection
+EndGlobal
