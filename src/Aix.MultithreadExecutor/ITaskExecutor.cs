@@ -51,6 +51,12 @@ namespace Aix.MultithreadExecutor
         ITaskExecutor GetSingleThreadTaskExecutor(string routeKey);
 
         /// <summary>
+        /// 获取待执行任务数量(即时任务，不包括延迟任务)
+        /// </summary>
+        /// <returns></returns>
+        int GetTaskCount();
+
+        /// <summary>
         /// 异常事件
         /// </summary>
         event Func<Exception, Task> OnException;

@@ -162,6 +162,11 @@ namespace Aix.MultithreadExecutor.TaskExecutor
             }, null);
         }
 
+        public int GetTaskCount()
+        {
+            return this._taskQueue.Count;
+        }
+
         public void Start()
         {
             if (_isStart) return;

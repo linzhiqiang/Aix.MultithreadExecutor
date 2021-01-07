@@ -83,6 +83,17 @@ namespace Aix.MultithreadExecutor.TaskExecutor
         {
             this.GetNext().Schedule(action, state, delay);
         }
+
+        public int GetTaskCount()
+        {
+            int sum = 0;
+            foreach (var item in this.EventLoops)
+            {
+                sum += item.GetTaskCount();
+            }
+
+            return sum;
+        }
         public void Start()
         {
             foreach (var item in this.EventLoops)
