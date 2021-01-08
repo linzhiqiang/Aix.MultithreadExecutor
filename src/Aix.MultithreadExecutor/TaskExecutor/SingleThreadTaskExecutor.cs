@@ -41,7 +41,6 @@ namespace Aix.MultithreadExecutor.TaskExecutor
                     }
                     catch (OperationCanceledException)
                     {
-
                     }
                     catch (Exception ex)
                     {
@@ -66,6 +65,9 @@ namespace Aix.MultithreadExecutor.TaskExecutor
                     try
                     {
                         RunDelayTask();
+                    }
+                    catch (OperationCanceledException)
+                    {
                     }
                     catch (Exception ex)
                     {
@@ -104,7 +106,13 @@ namespace Aix.MultithreadExecutor.TaskExecutor
         {
             if (OnException != null)
             {
-                await OnException(ex);
+                try
+                {
+                    await OnException(ex);
+                }
+                catch
+                {
+                }
             }
         }
 

@@ -1,28 +1,31 @@
-﻿using System;
+﻿using Aix.MultithreadExecutor.TaskExecutor;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Aix.MultithreadExecutor.TaskExecutor
+namespace Aix.MultithreadExecutor
 {
     /// <summary>
     /// 多线程任务执行器
     /// </summary>
-    internal class MultithreadTaskExecutor : ITaskExecutor
+    public abstract class MultithreadTaskExecutor : ITaskExecutor
     {
         static readonly int DefaultTaskExecutorThreadCount = Environment.ProcessorCount * 2;//默认线程数
         static Func<ITaskExecutor> DefaultExecutorFactory = () => new SingleThreadTaskExecutor();
         readonly ITaskExecutor[] EventLoops;
         int requestId;
 
-        public MultithreadTaskExecutor() : this(DefaultTaskExecutorThreadCount)
-        {
+        private MultithreadExecutorOptions options;
+        public int ThreadCount => options.ThreadCount; 
 
-        }
-        public MultithreadTaskExecutor(int threadCount)
+        public MultithreadTaskExecutor(Action<MultithreadExecutorOptions> setupOptions)
         {
-            threadCount = threadCount > 0 ? threadCount : DefaultTaskExecutorThreadCount;
+            options = new MultithreadExecutorOptions();
+            if (setupOptions != null) setupOptions(options);
+            if (options.ThreadCount <= 0) throw new ArgumentException("线程数必须大于0", "ThreadCount");
+            var threadCount = options.ThreadCount;
             this.EventLoops = new ITaskExecutor[threadCount];
             for (int i = 0; i < threadCount; i++)
             {
@@ -30,6 +33,7 @@ namespace Aix.MultithreadExecutor.TaskExecutor
                 this.EventLoops[i] = eventLoop;
                 eventLoop.OnException += EventLoop_OnException;
             }
+
         }
 
         public ITaskExecutor GetNext()
@@ -47,10 +51,10 @@ namespace Aix.MultithreadExecutor.TaskExecutor
         {
             return GetNext(routeId);
         }
-        public ITaskExecutor GetSingleThreadTaskExecutor(string   routeId)
+        public ITaskExecutor GetSingleThreadTaskExecutor(string routeId)
         {
-            if(!string.IsNullOrEmpty(routeId))
-            return GetNext(routeId.GetHashCode());
+            if (!string.IsNullOrEmpty(routeId))
+                return GetNext(routeId.GetHashCode());
 
             return GetNext();
         }
@@ -64,7 +68,7 @@ namespace Aix.MultithreadExecutor.TaskExecutor
 
         public event Func<Exception, Task> OnException;
 
-        public void Execute(Func<object,Task> action, object state)
+        public void Execute(Func<object, Task> action, object state)
         {
             this.GetNext().Execute(action, state);
         }
@@ -79,7 +83,7 @@ namespace Aix.MultithreadExecutor.TaskExecutor
             this.GetNext().Schedule(action, delay);
         }
 
-        public void Schedule(Func<object,Task> action, object state,TimeSpan delay)
+        public void Schedule(Func<object, Task> action, object state, TimeSpan delay)
         {
             this.GetNext().Schedule(action, state, delay);
         }

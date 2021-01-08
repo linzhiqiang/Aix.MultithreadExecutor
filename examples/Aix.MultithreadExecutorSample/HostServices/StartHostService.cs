@@ -16,10 +16,10 @@ namespace Aix.MultithreadExecutorSample.HostServices
         private readonly IServiceProvider _serviceProvider;
         private readonly IHostEnvironment _hostEnvironment;
 
-        private readonly ITaskExecutor _taskExecutor;
+        private readonly MyMultithreadTaskExecutor _taskExecutor;
 
         public StartHostService(ILogger<StartHostService> logger, IServiceProvider serviceProvider, IHostEnvironment hostEnvironment
-           , ITaskExecutor taskExecutor)
+           , MyMultithreadTaskExecutor taskExecutor)
         {
             _logger = logger;
             _serviceProvider = serviceProvider;
