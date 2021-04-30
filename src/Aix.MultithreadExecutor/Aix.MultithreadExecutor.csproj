@@ -5,7 +5,7 @@
     <Description>本地多线程执行器,支持本地延迟任务</Description>
     <RepositoryUrl>https://github.com/linzhiqiang/Aix.MultithreadExecutor.git</RepositoryUrl>
     <PackageProjectUrl>https://github.com/linzhiqiang/Aix.MultithreadExecutor.git</PackageProjectUrl>
-    <Version>1.0.2</Version>
+    <Version>1.0.3</Version>
   </PropertyGroup>
 
 </Project>

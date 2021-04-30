@@ -146,11 +146,21 @@ namespace Aix.MultithreadExecutor.TaskExecutor
 
         public void Schedule(IRunnable action, TimeSpan delay)
         {
+            if (delay <= TimeSpan.Zero)
+            {
+                Execute(action);
+                return;
+            }
             Schedule(new ScheduledRunnable(action, DateUtils.GetTimeStamp(DateTime.Now.Add(delay))));
         }
 
         public void Schedule(Func<object, Task> action, object state, TimeSpan delay)
         {
+            if (delay <= TimeSpan.Zero)
+            {
+                Execute(action, state);
+                return;
+            }
             Schedule(new TaskRunnable(action, state), delay);
         }
 
