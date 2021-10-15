@@ -116,6 +116,17 @@ namespace Aix.MultithreadExecutor.TaskExecutor
             }
         }
 
+        private void WithNoException(Action action)
+        {
+            try
+            {
+                action();
+            }
+            catch
+            {
+            }
+        }
+
         #region ITaskExecutor
 
         public event Func<Exception, Task> OnException;
@@ -217,8 +228,8 @@ namespace Aix.MultithreadExecutor.TaskExecutor
 
                     this._isStart = false;
                     this._isStartDelay = false;
-                    _taskQueue.CompleteAdding();
-                    CancellationTokenSource.Cancel();
+                    WithNoException(() => _taskQueue.CompleteAdding());
+                    WithNoException(() => CancellationTokenSource.Cancel());
                 }
             }
         }
@@ -230,4 +241,5 @@ namespace Aix.MultithreadExecutor.TaskExecutor
 
         #endregion
     }
+
 }

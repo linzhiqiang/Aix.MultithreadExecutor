@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aix.MultithreadExecutor", "
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "examples", "examples", "{85D209A7-DA3A-42FC-B918-E8F3A8ACC2C5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aix.MultithreadExecutorSample", "examples\Aix.MultithreadExecutorSample\Aix.MultithreadExecutorSample.csproj", "{0B6478E4-838E-44B8-A87A-42064552F5E3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aix.MultithreadExecutorSample", "examples\Aix.MultithreadExecutorSample\Aix.MultithreadExecutorSample.csproj", "{0B6478E4-838E-44B8-A87A-42064552F5E3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
