@@ -50,17 +50,43 @@ namespace Aix.MultithreadExecutorSample.HostServices
         CancellationTokenSource CTS = new CancellationTokenSource();
         private Task Test()
         {
+
+            Dictionary<int, NodeInfo> dict = new Dictionary<int, NodeInfo>();
             List<NodeInfo> nodeList = new List<NodeInfo>();
-            for (int i = 0; i < 250; i++)
+            //for (int i = 0; i < 5; i++)
+            //{
+            //    var temp = new NodeInfo
+            //    {
+            //        Id = i,
+            //        StartTime = 1,
+            //        ExposureTime = RandomUtils.Next(50, 100),
+            //        ReadTime = 1,
+            //        Opstate = Opstate.Start
+            //    };
+            //    nodeList.Add(temp);
+
+
+            //}
+
+            nodeList = new List<NodeInfo> {
+            new NodeInfo{  Id = 0, StartTime=0.083, ExposureTime = 2240, ReadTime = 56*4*0.001, Opstate = Opstate.Start},
+             new NodeInfo{  Id = 1, StartTime=0.083, ExposureTime = 1120, ReadTime =  56*4*0.001, Opstate = Opstate.Start},
+              new NodeInfo{  Id = 2, StartTime=0.083, ExposureTime = 840, ReadTime = 56*4*0.001, Opstate = Opstate.Start},
+               new NodeInfo{  Id = 3, StartTime=0.083, ExposureTime = 320, ReadTime = 16*4*0.001, Opstate = Opstate.Start},
+                new NodeInfo{  Id = 4, StartTime=0.083, ExposureTime = 240, ReadTime =16*4*0.001, Opstate = Opstate.Start},
+                new NodeInfo{  Id = 5, StartTime=0.083, ExposureTime = 160, ReadTime = 16*4*0.001, Opstate = Opstate.Start},
+             new NodeInfo{  Id = 6, StartTime=0.005, ExposureTime = 86, ReadTime =4*4*0.001, Opstate = Opstate.Start},
+              new NodeInfo{  Id = 7, StartTime=0.005, ExposureTime = 43, ReadTime = 4*4*0.001, Opstate = Opstate.Start},
+               new NodeInfo{  Id = 8, StartTime=0.002, ExposureTime = 0.8, ReadTime = 2*4*0.001, Opstate = Opstate.Start},
+                new NodeInfo{  Id = 9, StartTime=0.002, ExposureTime = 0.4, ReadTime =  2*4*0.001, Opstate = Opstate.Start},
+            };
+
+
+
+
+            foreach (var item in nodeList)
             {
-                nodeList.Add(new NodeInfo
-                {
-                    Id = i,
-                    StartTime = 2,
-                    ExposureTime = RandomUtils.Next(5, 10),
-                    ReadTime = 3,
-                    Opstate = Opstate.Start
-                });
+                dict.Add(item.Id, item);
             }
 
             foreach (var item in nodeList.OrderBy(x => x.ExposureTime))
@@ -75,7 +101,6 @@ namespace Aix.MultithreadExecutorSample.HostServices
 
             Task.Run(async () =>
             {
-
                 await Task.Delay(3000);
 
                 while (true)
@@ -93,9 +118,8 @@ namespace Aix.MultithreadExecutorSample.HostServices
                     var item = Queue.Dequeue(token);
                     if (item.Opstate == Opstate.Start)
                     {
-                        var delay = item.StartTime + item.ExposureTime;
-                        result.Add(new ResultInfo { Id = item.Id, Opstate = Opstate.Start, Delay = delay });
-                        
+                        result.Add(new ResultInfo { Id = item.Id, ExposureTime = item.ExposureTime, Opstate = Opstate.Start, Delay = item.StartTime });
+
                         _taskExecutor.Schedule(obj =>
                         {
                             var nodeInfo = obj as NodeInfo;
@@ -110,8 +134,8 @@ namespace Aix.MultithreadExecutorSample.HostServices
                         //读取 
                         if (DateTime.Now <= endTime)
                         {
-                            result.Add(new ResultInfo { Id = item.Id, Opstate = Opstate.Read, Delay = item.ReadTime });
-                            
+                            result.Add(new ResultInfo { Id = item.Id, ExposureTime = 0, Opstate = Opstate.Read, Delay = item.ReadTime });
+
                             _taskExecutor.Schedule(obj =>
                             {
                                 var nodeInfo = obj as NodeInfo;
@@ -150,8 +174,39 @@ namespace Aix.MultithreadExecutorSample.HostServices
             //    last = item;
             //}
 
-            foreach (var item in result)
+            Dictionary<int, int> lastNodeIndexDict = new Dictionary<int, int>();
+
+            for (int i = 0; i < result.Count; i++)
             {
+                var current = result[i];
+                if (!lastNodeIndexDict.ContainsKey(current.Id))
+                {
+                    lastNodeIndexDict.Add(current.Id, i);
+                }
+
+
+                if (i + 1 < result.Count) //有下一个
+                {
+                    var next = result[i + 1];
+                    if (!lastNodeIndexDict.ContainsKey(next.Id)) continue;
+
+
+                    var lastIndex = lastNodeIndexDict[next.Id];
+                    double sum = 0;
+                    for (int m = lastIndex + 1; m < i; m++)
+                    {
+                        sum += result[m].Delay;
+                    }
+
+                    var diff = result[lastIndex].ExposureTime - sum;
+                    if (diff < 0) diff = 0;
+                    current.Delay = current.Delay + diff;
+
+                    lastNodeIndexDict[next.Id] = i + 1;
+                }
+
+
+
 
             }
 
@@ -204,17 +259,17 @@ namespace Aix.MultithreadExecutorSample.HostServices
         /// <summary>
         /// 启动时间
         /// </summary>
-        public int StartTime { get; set; }
+        public double StartTime { get; set; }
 
         /// <summary>
         /// 曝光时间 millisecond  可以并行执行
         /// </summary>
-        public int ExposureTime { get; set; }
+        public double ExposureTime { get; set; }
 
         /// <summary>
         /// 读取时间
         /// </summary>
-        public int ReadTime { get; set; }
+        public double ReadTime { get; set; }
 
         public Opstate Opstate { get; set; }
     }
@@ -234,6 +289,11 @@ namespace Aix.MultithreadExecutorSample.HostServices
         /// 等待时间
         /// </summary>
         public double Delay { get; set; }
+
+        /// <summary>
+        /// 曝光时间
+        /// </summary>
+        public double ExposureTime { get; set; }
 
 
     }
