@@ -6,7 +6,7 @@ using System.Threading;
 
 namespace  Aix.MultithreadExecutor.Foundation
 {
-    internal class BlockingQueue<T> : IBlockingQueue<T>
+    public class BlockingQueue<T> : IBlockingQueue<T>
     {
         private BlockingCollection<T> BlockQueue;
 

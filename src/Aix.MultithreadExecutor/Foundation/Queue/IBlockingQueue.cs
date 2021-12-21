@@ -5,7 +5,7 @@ using System.Threading;
 
 namespace Aix.MultithreadExecutor.Foundation
 {
-    internal interface IBlockingQueue<T>
+    public interface IBlockingQueue<T>
     {
         int Count { get; }
 
